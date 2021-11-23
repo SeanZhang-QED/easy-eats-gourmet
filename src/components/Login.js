@@ -1,13 +1,28 @@
-import React from 'react';
-import {Avatar, Box, Button, Container, TextField, Typography} from "@mui/material";
+import React, {useEffect, useState} from 'react';
+import {
+    Avatar,
+    Box,
+    Button,
+    Container,
+    FormControl, FormHelperText,
+    IconButton,
+    InputAdornment,
+    TextField,
+    Typography, useFormControl
+} from "@mui/material";
 import LockOutlinedIcon from '@mui/icons-material/LockOutlined';
 import {Link, Navigate} from "react-router-dom";
 import axios from "axios";
 import {BASE_URL} from "../constants";
+import Visibility from "@mui/icons-material/Visibility";
+import VisibilityOff from "@mui/icons-material/VisibilityOff";
 
 function Login(props) {
     // handleLoggedIn is a call back function passed by App, to store the received Token into localStorage
     const { isLoggedIn, handleLoggedIn, handleAlert } = props;
+    const [ isPEmpty, setIsPEmpty ] = useState(false);
+    const [ isUEmpty, setIsUEmpty ] = useState(false);
+    const [showPassword, setShowPassword] = useState(false);
 
     const handleSubmit = (event) =>{
         event.preventDefault();
@@ -58,7 +73,7 @@ function Login(props) {
                             textAlign:'center'
                         }}
                     >
-                        <Avatar sx={{ m: 1, bgcolor: 'secondary.main' }}>
+                        <Avatar sx={{ m: 1, bgcolor: 'primary.main' }}>
                             <LockOutlinedIcon />
                         </Avatar>
                         <Typography component="h1" variant="h5">
@@ -74,6 +89,15 @@ function Login(props) {
                                 name="username"
                                 autoComplete="username"
                                 autoFocus
+                                error={isUEmpty}
+                                helperText={isUEmpty ? 'Can not leave it empty':''}
+                                onChange={(e)=>{
+                                    if(!e.target.value){
+                                        setIsUEmpty(true);
+                                    } else {
+                                        setIsUEmpty(false);
+                                    }
+                                }}
                             />
                             <TextField
                                 margin="normal"
@@ -81,9 +105,30 @@ function Login(props) {
                                 fullWidth
                                 name="password"
                                 label="Password"
-                                type="password"
+                                type={showPassword ? "text" : "password"}
                                 id="password"
                                 autoComplete="current-password"
+                                error={isPEmpty}
+                                helperText={isPEmpty ? 'Can not leave it empty':''}
+                                onChange={(e)=>{
+                                    if(!e.target.value){
+                                        setIsPEmpty(true);
+                                    } else {
+                                        setIsPEmpty(false);
+                                    }
+                                }}
+                                InputProps={{ // <-- This is where the toggle button is added.
+                                    endAdornment: (
+                                        <InputAdornment position="end">
+                                            <IconButton
+                                                onClick={() => setShowPassword(!showPassword)}
+                                                onMouseDown={() => setShowPassword(!showPassword)}
+                                            >
+                                                {showPassword ? <Visibility /> : <VisibilityOff />}
+                                            </IconButton>
+                                        </InputAdornment>
+                                    )
+                                }}
                             />
                             <Button
                                 type="submit"

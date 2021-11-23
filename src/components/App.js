@@ -1,12 +1,10 @@
-import logo from '../assets/images/logo.svg';
 import '../styles/App.css';
 import TopBar from "./TopBar";
 import Main from "./Main";
 import { TOKEN_KEY } from "../constants";
 import {useEffect, useState} from "react";
-import {Alert, IconButton, Link, Snackbar, Typography} from "@mui/material";
+import {Alert, IconButton, Snackbar} from "@mui/material";
 import CopyRight from "./CopyRight";
-import Collapse from '@mui/material/Collapse';
 import CloseIcon from '@mui/icons-material/Close';
 
 function App() {
