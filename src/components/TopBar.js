@@ -6,6 +6,8 @@ import Toolbar from '@mui/material/Toolbar';
 import Typography from '@mui/material/Typography';
 import Button from '@mui/material/Button';
 import {useNavigate} from "react-router-dom";
+import LogoutIcon from '@mui/icons-material/Logout';
+import {IconButton} from "@mui/material";
 
 function TopBar(props) {
     const navigate  = useNavigate();
@@ -21,8 +23,9 @@ function TopBar(props) {
                     </Typography>
                     {
                         isLoggedIn ?
-                            // <LogoutOutlined className='logout' onClick={handleLogout}/>
-                            "log out"
+                            <IconButton className='logout' onClick={handleLogout}>
+                                <LogoutIcon sx={{fill:"white"}} />
+                            </IconButton>
                             :
                             <Button color="inherit" onClick={() => {
                                 navigate(`/login`);

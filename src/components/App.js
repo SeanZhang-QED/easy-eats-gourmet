@@ -3,7 +3,7 @@ import TopBar from "./TopBar";
 import Main from "./Main";
 import { TOKEN_KEY } from "../constants";
 import {useEffect, useState} from "react";
-import {Alert, IconButton, Snackbar} from "@mui/material";
+import {Alert, Box, IconButton, Snackbar} from "@mui/material";
 import CopyRight from "./CopyRight";
 import CloseIcon from '@mui/icons-material/Close';
 
@@ -59,10 +59,14 @@ function App() {
                 {alertInfo}
             </Alert>
         </Snackbar>
-        <TopBar isLoggedIn={isLoggedIn} handleLogeout={onLogout} handleAlert = {onAlert}/>
+        <TopBar isLoggedIn={isLoggedIn} handleLogout={onLogout} handleAlert = {onAlert}/>
         {/*  <TopBar />*/}
-        <Main isLoggedIn={isLoggedIn} handleLoggedIn={onLoggedIn} handleAlert = {onAlert}/>
-        <CopyRight sx={{ mt: 8, mb: 4 }}/>
+        <Main
+            isLoggedIn={isLoggedIn} handleLoggedIn={onLoggedIn} handleAlert = {onAlert}/>
+        <Box sx = {{ bgcolor: 'background.paper', p: 6, pb: 2, pt: 2, }}
+             component="footer">
+            <CopyRight sx={{ mt: 4, mb: 2 }}/>
+        </Box>
     </div>
   );
 }
