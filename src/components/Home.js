@@ -54,7 +54,7 @@ function Home(props) {
     const [ isLoading, setIsLoading ] = useState(false);
     const [ posts, setPosts ] = useState([]);
     const [ value, setValue] = useState(0);
-    const [ isUploaded, setIsUploaded] = useState(false);
+    const [ isEdited, setIsEdited] = useState(false);
 
     const handleSearch = (options) => {
         // get the data from search bar, then fetch data
@@ -67,22 +67,23 @@ function Home(props) {
 
     const handleDeleted = ()=>{
         setIsLoading(true);
-        fetchPosts(searchOption);
+        // fetchPosts(searchOption);
+        setIsEdited(true);
     }
 
     const handleUploaded = ()=>{
         setIsLoading(true);
         // fetchPosts(searchOption);
-        setIsUploaded(true);
+        setIsEdited(true);
     }
 
     useEffect(()=>{
-        if (!isUploaded) {
+        if (!setIsEdited) {
             return
         };
         fetchPosts(searchOption);
-        setIsUploaded(false);
-    },[isUploaded]);
+        setIsEdited(false);
+    },[setIsEdited]);
 
     useEffect((
     )=>{

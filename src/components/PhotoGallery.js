@@ -71,7 +71,7 @@ function PhotoGallery(props) {
                 })
                 .catch( err => {
                     // case2: fail
-                    props.handleAllert('error','Delete posts failed!')
+                    props.handleAllert('error','Delete posts failed!');
                     console.log('fetch posts failed: ', err.message);
                 })
         }

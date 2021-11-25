@@ -113,7 +113,7 @@ function UploadButton(props) {
         <Box>
             <Fab color="primary"
                  size="medium"
-                 sx={{position: 'absolute', bottom: 100, right: 24}}
+                 sx={{position: 'fixed', bottom: 100, right: 24, zIndex: (theme) => theme.zIndex.drawer + 1}}
                  onClick={handleOpen}
             >
                 <AddIcon />
