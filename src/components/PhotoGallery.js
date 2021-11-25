@@ -1,7 +1,7 @@
 import React, {useEffect, useState} from 'react';
 import Gallery from 'react-grid-gallery';
 import axios from "axios";
-import {Button, IconButton} from "@mui/material";
+import {Button} from "@mui/material";
 import DeleteIcon from '@mui/icons-material/Delete';
 import {BASE_URL, TOKEN_KEY} from "../constants";
 

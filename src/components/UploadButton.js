@@ -1,24 +1,20 @@
 import React, {useState} from 'react';
 import {
-    Backdrop,
     Box,
-    Button, CircularProgress,
+    Button,
     Dialog,
     DialogActions,
     DialogContent,
     DialogTitle, Divider,
     Fab,
-    IconButton, Input,
-    Modal, TextField,
-    Typography
+    IconButton, TextField, ToggleButton, ToggleButtonGroup,
 } from "@mui/material";
 import AddIcon from '@mui/icons-material/Add';
 import CloseIcon from '@mui/icons-material/Close';
 import {BASE_URL, TOKEN_KEY} from "../constants";
 import axios from "axios";
-import {Navigate} from "react-router-dom";
-import SearchBar from "./SearchBar";
-
+import ImageIcon from '@mui/icons-material/Image';
+import MovieIcon from '@mui/icons-material/Movie';
 
 const BootstrapDialogTitle = (props) => {
     const { children, onClose, ...other } = props;
@@ -48,6 +44,7 @@ const BootstrapDialogTitle = (props) => {
 function UploadButton(props) {
     const [open, setOpen] = useState(false);
     const [message, setMessage] = useState();
+    const [fileType, setFileType] = useState();
     const [isEmpty, setIsEmpty] = useState(false);
     const [currentFile, setCurrentFile] = useState();
     const [loading, setLoading] = useState(false);
@@ -114,14 +111,6 @@ function UploadButton(props) {
 
     return (
         <Box>
-            <div>
-                <Backdrop
-                    sx={{ color: '#fff', zIndex: (theme) => theme.zIndex.drawer + 1 }}
-                    open={loading}
-                >
-                    <CircularProgress color="inherit" />
-                </Backdrop>
-            </div>
             <Fab color="primary"
                  size="medium"
                  sx={{position: 'absolute', bottom: 100, right: 24}}
@@ -139,6 +128,23 @@ function UploadButton(props) {
                 </BootstrapDialogTitle>
                 <Divider />
                 <DialogContent >
+                    <ToggleButtonGroup
+                        color="primary"
+                        value={fileType}
+                        exclusive
+                        size="small"
+                        onChange={(event, newValue)=>{
+                            // console.log(newValue);
+                            setFileType(newValue);
+                        }}
+                    >
+                        <ToggleButton value="Image" size="small">
+                            <ImageIcon />
+                        </ToggleButton>
+                        <ToggleButton value="Video" size="small">
+                            <MovieIcon />
+                        </ToggleButton>
+                    </ToggleButtonGroup>
                     <TextField
                         autoFocus
                         required
@@ -167,7 +173,7 @@ function UploadButton(props) {
                             name="btn-upload"
                             style={{ display: 'none'}}
                             type="file"
-                            accept="image/*"
+                            accept={fileType === "Image" ? "image/*" : "video/*" }
                             onChange={(event)=>{
                                 let file = event.target.files[0];
                                 // console.log(file);
@@ -190,13 +196,16 @@ function UploadButton(props) {
                 </DialogContent>
                 <DialogActions>
                     <Button onClick={handleClose}
-                            variant="outlined">
-                        Cancel
+                            variant="outlined"
+                            disabled={loading}
+
+                    >
+                        { loading ? "Uploading..." : "Cancel"}
                     </Button>
                     <Button variant="outlined"
-                            disabled={!currentFile}
+                            disabled={!currentFile || loading}
                             onClick={handleUpload}>
-                        Upload
+                        { loading ? "Uploading..." : "Upload"}
                     </Button>
                 </DialogActions>
             </Dialog>

@@ -5,8 +5,8 @@ import {
     Backdrop,
     Box,
     CircularProgress,
-    Container, Fab,
-    Grid, IconButton,
+    Container,
+    Grid,
     Tab,
     Tabs,
     Typography
@@ -120,46 +120,46 @@ function Home(props) {
         })
     };
 
-    const renderPosts = (type) => {
-        // case 1: no data
-        if (!posts || posts.length === 0) {
-            return <div>No data!</div>;
-        }
-        // console.log(posts);
-        if (type === "image") {
-            const imageArr = posts
-                .filter((item) => item.type === "image") // filter() will return a new filtered array
-                .map((image) => { // map = 遍历, iteration
-                    return {
-                        postId: image.id,
-                        src: image.url, //required for PhotoGallery
-                        user: image.user,
-                        caption: image.message,
-                        thumbnail: image.url, //required for PhotoGallery
-                        thumbnailWidth: 300, //required for PhotoGallery
-                        thumbnailHeight: 200 //required for PhotoGallery
-                    };
-                });
-            return <PhotoGallery images={imageArr} handleAllert={handleAlert} />;
-        } else if (type === "video") {
-            // case 3: left the rest video post.
-            // console.log("video -> ", posts);
-            // return "videos";
-            return (
-            <Grid container spacing={{ xs: 2, md: 3 }} columns={{ xs: 4, sm: 8, md: 12 }}>
-                {posts
-                    .filter((post) => post.type === "video").map((post) => (
-                    <Grid item xs={2} sm={4} md={4} key={post.url}>
-                        <video src={post.url} controls={true} className="video-block" />
-                        <p>
-                            {post.user}: {post.message}
-                        </p>
-                    </Grid>
-                ))}
-            </Grid>
-            )
-        }
-    }
+    // const renderPosts = (type) => {
+    //     // case 1: no data
+    //     if (!posts || posts.length === 0) {
+    //         return <div>No data!</div>;
+    //     }
+    //     // console.log(posts);
+    //     if (type === "image") {
+    //         const imageArr = posts
+    //             .filter((item) => item.type === "image") // filter() will return a new filtered array
+    //             .map((image) => { // map = 遍历, iteration
+    //                 return {
+    //                     postId: image.id,
+    //                     src: image.url, //required for PhotoGallery
+    //                     user: image.user,
+    //                     caption: image.message,
+    //                     thumbnail: image.url, //required for PhotoGallery
+    //                     thumbnailWidth: 300, //required for PhotoGallery
+    //                     thumbnailHeight: 200 //required for PhotoGallery
+    //                 };
+    //             });
+    //         return <PhotoGallery images={imageArr} handleAllert={handleAlert} />;
+    //     } else if (type === "video") {
+    //         // case 3: left the rest video post.
+    //         // console.log("video -> ", posts);
+    //         // return "videos";
+    //         return (
+    //         <Grid container spacing={{ xs: 2, md: 3 }} columns={{ xs: 4, sm: 8, md: 12 }}>
+    //             {posts
+    //                 .filter((post) => post.type === "video").map((post) => (
+    //                 <Grid item xs={2} sm={4} md={4} key={post.url}>
+    //                     <video src={post.url} controls={true} className="video-block" />
+    //                     <p>
+    //                         {post.user}: {post.message}
+    //                     </p>
+    //                 </Grid>
+    //             ))}
+    //         </Grid>
+    //         )
+    //     }
+    // }
 
     const renderImages = () => {
         console.log("Render the tab content of Images.");

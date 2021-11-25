@@ -4,18 +4,15 @@ import {
     Divider,
     FormControl,
     FormControlLabel,
-    Grid,
-    IconButton, Input,
-    InputBase, Menu, MenuItem, MenuList,
+
+    IconButton,
+    InputBase,
     Paper,
-    RadioGroup, Select, TextField, Typography
+    RadioGroup, Typography
 } from "@mui/material";
 import SearchIcon from '@mui/icons-material/Search';
 import Radio from '@mui/material/Radio';
 import MenuIcon from '@mui/icons-material/Menu';
-import AllInclusiveIcon from '@mui/icons-material/AllInclusive';
-import AccountCircleIcon from '@mui/icons-material/AccountCircle';
-import ChatIcon from '@mui/icons-material/Chat';
 import {SEARCH_KEY} from "../constants";
 
 function SearchBar(props) {

@@ -2,7 +2,7 @@ import '../styles/App.css';
 import TopBar from "./TopBar";
 import Main from "./Main";
 import { TOKEN_KEY } from "../constants";
-import {useEffect, useState} from "react";
+import {useState} from "react";
 import {Alert, Box, IconButton, Snackbar} from "@mui/material";
 import CopyRight from "./CopyRight";
 import CloseIcon from '@mui/icons-material/Close';

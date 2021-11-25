@@ -1,5 +1,5 @@
 import React from 'react';
-import {Box, Link, Typography} from "@mui/material";
+import {Link, Typography} from "@mui/material";
 
 function CopyRight(props) {
     return (
