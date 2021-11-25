@@ -33,11 +33,24 @@ function SearchBar(props) {
         }
         // need to remove error <- reset to ""
         setError("");
-        let data = {
+        props.handleSearch({
             type: type,
             keywords: keyInfo
+        });
+    };
+
+    const changeSearchType = (e) => {
+        // e is the event object
+        const searchType = e.target.value;
+        console.log(searchType);
+        // call setStates fn to reset the searchType value
+        setType(searchType);
+        // 切换时应该清除error message
+        setError("");
+        // if search type is all, then disable the keyword, -> set the keyword=""
+        if (searchType == SEARCH_KEY.all) {
+            props.handleSearch({ type: SEARCH_KEY.all, keywords: "" });
         }
-        props.handleSearch(data);
     };
 
 
@@ -68,9 +81,8 @@ function SearchBar(props) {
                 <RadioGroup row
                             name="search-type-group"
                             sx={{mt:1, display:'flex', justifyContent:'space-evenly'}}
-                            onChange={(e)=>{
-                                setType(e.target.value);
-                            }}
+                            onChange={changeSearchType}
+
                 >
                     <FormControlLabel value={SEARCH_KEY.all} control={<Radio />} label="All" />
                     <FormControlLabel value={SEARCH_KEY.keyword} control={<Radio />} label="Keyword" />

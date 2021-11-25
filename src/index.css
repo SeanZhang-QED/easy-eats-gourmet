@@ -4,6 +4,7 @@
 @import "./styles/Login.css";
 @import "./styles/Signup.css";
 @import "./styles/Home.css";
+@import "./styles/UploadButton.css";
 
 body {
   margin: 0;

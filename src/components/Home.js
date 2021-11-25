@@ -15,9 +15,9 @@ import {BASE_URL, SEARCH_KEY, TOKEN_KEY} from "../constants";
 import axios from "axios";
 import ImageIcon from '@mui/icons-material/Image';
 import MovieIcon from '@mui/icons-material/Movie';
-import AddIcon from '@mui/icons-material/Add';
 import PhotoGallery from "./PhotoGallery";
 import PropTypes from 'prop-types';
+import UploadButton from "./UploadButton";
 
 function TabPanel(props) {
     const { children, value, index, ...other } = props;
@@ -47,30 +47,45 @@ TabPanel.propTypes = {
 
 function Home(props) {
     const { isLoggedIn, handleAlert } = props;
+    const [searchOption, setSearchOption] = useState({
+        type:SEARCH_KEY.all,
+        keywords: ""
+    }); // initial as an object.
     const [ isLoading, setIsLoading ] = useState(false);
     const [ posts, setPosts ] = useState([]);
     const [ value, setValue] = useState(0);
 
-    const handleSearch = (data) => {
+    const handleSearch = (options) => {
         // get the data from search bar, then fetch data
-        const {type, keywords} = data;
+        const {type, keywords} = options;
+        console.log("received the changed data" + type + keywords);
+        setSearchOption({ type: type, keywords: keywords });
         // set loading
         setIsLoading(true);
-        fetchPosts(data);
     };
 
-    // didMount need to fetch the data from the backend for the first time
-    useEffect(()=>{
-        fetchPosts({
-            type:SEARCH_KEY.all,
-            keywords:'',
-        })
-        // console.log(" <- fetch all the post when component mount.")
-    },[]);
+    const handleDeleted = ()=>{
+        setIsLoading(true);
+        fetchPosts(searchOption);
+    }
+
+    const handleUploaded = ()=>{
+        setIsLoading(true);
+        fetchPosts(searchOption);
+    }
+
+    useEffect((
+    )=>{
+        // do search
+        // 1st, didMount <- type = all, keyword = "'
+        // after that, didUpdate type = all/user/keyword, keyword = keyword
+        console.log("Option changed!")
+        fetchPosts(searchOption);
+    },[searchOption]);
 
 
-    const fetchPosts = (data) => {
-        const {type, keywords} = data;
+    const fetchPosts = (options) => {
+        const {type, keywords} = options;
         // fetch data
         // 1. url
         let url = "";
@@ -100,10 +115,9 @@ function Home(props) {
             .catch((err) => {
                 handleAlert('error','Fetch posts failed!')
                 console.log("fetch posts failed: ", err.message);
-            })
-            .finally(()=>{
-                setIsLoading(false);
-            });
+            }).finally(()=>{
+            setIsLoading(false);
+        })
     };
 
     const renderPosts = (type) => {
@@ -147,6 +161,50 @@ function Home(props) {
         }
     }
 
+    const renderImages = () => {
+        console.log("Render the tab content of Images.");
+        // case 1: no data
+        let images = posts.filter((post) => post.type === "image");
+        // case 1: no data
+        if (!images || images.length === 0) {
+            return <div>No data!</div>;
+        }
+        // console.log(posts);
+        const imageArr = images // filter() will return a new filtered array
+            .map((image) => { // map = 遍历, iteration
+                return {
+                    postId: image.id,
+                    src: image.url, //required for PhotoGallery
+                    user: image.user,
+                    caption: image.message,
+                    thumbnail: image.url, //required for PhotoGallery
+                    thumbnailWidth: 300, //required for PhotoGallery
+                    thumbnailHeight: 200 //required for PhotoGallery
+                };
+            });
+        return <PhotoGallery images={imageArr} handleAllert={handleAlert} handleDeleted={handleDeleted} />;
+    }
+    const renderVideos = () => {
+        console.log("Render the tab content of Videos.");
+        let videos = posts.filter((post) => post.type === "video");
+        // case 1: no data
+        if (!videos || videos.length === 0) {
+            return <div>No data!</div>;
+        }
+        return (
+            <Grid container spacing={{ xs: 2, md: 3 }} columns={{ xs: 4, sm: 8, md: 12 }}>
+                {videos.map((video) => (
+                        <Grid item xs={2} sm={4} md={4} key={video.url}>
+                            <video src={video.url} controls={true} className="video-block" />
+                            <p>
+                                {video.user}: {video.message}
+                            </p>
+                        </Grid>
+                    ))}
+            </Grid>
+        )
+    }
+
     return (
         <div style={{height:'calc(100vh - 64px - 56px - 101px)'}}>
             <div>
@@ -178,16 +236,12 @@ function Home(props) {
                         <Tab icon={<ImageIcon />} label="Images" />
                         <Tab icon={<MovieIcon />} label="Videos" />
                     </Tabs>
-                    <Fab color="primary"
-                         size="medium"
-                         sx={{ position: 'absolute', bottom: 100, right: 24}}
-                         onClick={()=>{console.log("upload!")}}
-                    >
-                        <AddIcon />
-                    </Fab>
+                    <UploadButton handleUploaded={handleUploaded} handleAlert={handleAlert}/>
                 </Box>
-                <TabPanel value={value} index={0}>{renderPosts('image')}</TabPanel>
-                <TabPanel value={value} index={1}>{renderPosts('video')}</TabPanel>
+                {/*<TabPanel value={value} index={0}>{renderPosts('image')}</TabPanel>*/}
+                {/*<TabPanel value={value} index={1}>{renderPosts('video')}</TabPanel>*/}
+                <TabPanel value={value} index={0}>{renderImages()}</TabPanel>
+                <TabPanel value={value} index={1}>{renderVideos()}</TabPanel>
             </Container>
         </div>
     );
