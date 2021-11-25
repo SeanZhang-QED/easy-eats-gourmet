@@ -163,6 +163,9 @@ function Home(props) {
 
     const renderImages = () => {
         console.log("Render the tab content of Images.");
+        if (posts == null) {
+            return
+        }
         // case 1: no data
         let images = posts.filter((post) => post.type === "image");
         // case 1: no data
@@ -186,6 +189,9 @@ function Home(props) {
     }
     const renderVideos = () => {
         console.log("Render the tab content of Videos.");
+        if (posts == null) {
+            return
+        }
         let videos = posts.filter((post) => post.type === "video");
         // case 1: no data
         if (!videos || videos.length === 0) {
