@@ -54,6 +54,7 @@ function Home(props) {
     const [ isLoading, setIsLoading ] = useState(false);
     const [ posts, setPosts ] = useState([]);
     const [ value, setValue] = useState(0);
+    const [ isUploaded, setIsUploaded] = useState(false);
 
     const handleSearch = (options) => {
         // get the data from search bar, then fetch data
@@ -71,8 +72,17 @@ function Home(props) {
 
     const handleUploaded = ()=>{
         setIsLoading(true);
-        fetchPosts(searchOption);
+        // fetchPosts(searchOption);
+        setIsUploaded(true);
     }
+
+    useEffect(()=>{
+        if (!isUploaded) {
+            return
+        };
+        fetchPosts(searchOption);
+        setIsUploaded(false);
+    },[isUploaded]);
 
     useEffect((
     )=>{
