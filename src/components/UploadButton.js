@@ -197,7 +197,7 @@ function UploadButton(props) {
                 <DialogActions>
                     { loading
                         ?
-                        "Uploading..."
+                        ""
                         :
                         <Button onClick={handleClose}
                                 variant="outlined"
