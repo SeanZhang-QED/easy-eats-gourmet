@@ -112,6 +112,7 @@ function Home(props) {
             return
         };
         fetchPosts(searchOption);
+        console.log("refresh the view after upload or delete.");
     },[isEdited]);
 
     useEffect((
