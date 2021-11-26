@@ -3,10 +3,10 @@ import {Navigate} from "react-router-dom";
 import SearchBar from "./SearchBar";
 import {
     Backdrop,
-    Box,
+    Box, Button, Card, CardActions, CardContent, CardMedia,
     CircularProgress,
-    Container,
-    Grid,
+    Container, Divider,
+    Grid, IconButton,
     Tab,
     Tabs,
     Typography
@@ -18,6 +18,7 @@ import MovieIcon from '@mui/icons-material/Movie';
 import PhotoGallery from "./PhotoGallery";
 import PropTypes from 'prop-types';
 import UploadButton from "./UploadButton";
+import DeleteIcon from '@mui/icons-material/Delete';
 
 function TabPanel(props) {
     const { children, value, index, ...other } = props;
@@ -45,6 +46,8 @@ TabPanel.propTypes = {
     value: PropTypes.number.isRequired,
 };
 
+
+
 function Home(props) {
     const { isLoggedIn, handleAlert } = props;
     const [searchOption, setSearchOption] = useState({
@@ -61,18 +64,45 @@ function Home(props) {
         const {type, keywords} = options;
         console.log("received the changed data" + type + keywords);
         setSearchOption({ type: type, keywords: keywords });
-        // set loading
-        setIsLoading(true);
+
+    };
+
+    const handleVideoDelete = (video) => {
+        setIsEdited(true);
+        if (window.confirm(`Are you sure you want to delete this video?`)){
+
+            const opt = {
+                method: 'DELETE',
+                url: `${BASE_URL}/post/${video.id}`,
+                headers: {
+                    'Authorization': `Bearer ${localStorage.getItem(TOKEN_KEY)}`
+                }
+            };
+
+            axios(opt)
+                .then( res => {
+                    // console.log('delete result -> ', res);
+                    // case1: success
+                    if(res.status === 200) {
+                        // step1: set state
+                        handleAlert('success','Delete posts successes!');
+                        handleDeleted();
+                    }
+                })
+                .catch( err => {
+                    // case2: fail
+                    handleAlert('error','Delete posts failed!');
+                    console.log('fetch posts failed: ', err.message);
+                })
+        };
     };
 
     const handleDeleted = ()=>{
-        setIsLoading(true);
         // fetchPosts(searchOption);
         setIsEdited(true);
     }
 
     const handleUploaded = ()=>{
-        setIsLoading(true);
         // fetchPosts(searchOption);
         setIsEdited(true);
     }
@@ -82,8 +112,7 @@ function Home(props) {
             return
         };
         fetchPosts(searchOption);
-        setIsEdited(false);
-    },[setIsEdited]);
+    },[isEdited]);
 
     useEffect((
     )=>{
@@ -96,17 +125,20 @@ function Home(props) {
 
 
     const fetchPosts = (options) => {
+        setIsLoading(true);
         const {type, keywords} = options;
         // fetch data
         // 1. url
         let url = "";
         if (type === SEARCH_KEY.all) {
             url = `${BASE_URL}/search`;
-        } else if (type === SEARCH_KEY.user) {
+        } else if (type == SEARCH_KEY.user) {
             url = `${BASE_URL}/search?user=${keywords}`;
         } else {
             url = `${BASE_URL}/search?keywords=${keywords}`;
         }
+        // console.log(type == SEARCH_KEY.user);
+        // console.log(url);
         // 2. opt
         const opt = {
             method: "GET",
@@ -119,7 +151,7 @@ function Home(props) {
         axios(opt)
             .then((res) => {
                 if (res.status === 200) {
-                    // console.log(res.data);
+                    console.log(res.data);
                     setPosts(res.data);
                 }
             })
@@ -127,8 +159,9 @@ function Home(props) {
                 handleAlert('error','Fetch posts failed!')
                 console.log("fetch posts failed: ", err.message);
             }).finally(()=>{
+            setIsEdited(false);
             setIsLoading(false);
-        })
+        });
     };
 
     // const renderPosts = (type) => {
@@ -173,7 +206,7 @@ function Home(props) {
     // }
 
     const renderImages = () => {
-        console.log("Render the tab content of Images.");
+        // console.log("Render the tab content of Images.");
         if (posts == null) {
             return
         }
@@ -196,10 +229,11 @@ function Home(props) {
                     thumbnailHeight: 200 //required for PhotoGallery
                 };
             });
-        return <PhotoGallery images={imageArr} handleAllert={handleAlert} handleDeleted={handleDeleted} />;
+        return <PhotoGallery images={imageArr} handleAlert={handleAlert} handleDeleted={handleDeleted} />;
     }
+
     const renderVideos = () => {
-        console.log("Render the tab content of Videos.");
+        // console.log("Render the tab content of Videos.");
         if (posts == null) {
             return
         }
@@ -212,10 +246,30 @@ function Home(props) {
             <Grid container spacing={{ xs: 2, md: 3 }} columns={{ xs: 4, sm: 8, md: 12 }}>
                 {videos.map((video) => (
                         <Grid item xs={2} sm={4} md={4} key={video.url}>
-                            <video src={video.url} controls={true} className="video-block" />
-                            <p>
-                                {video.user}: {video.message}
-                            </p>
+                            <Card
+                                variant="outlined"
+                                sx={{ height: '100%', display: 'flex', flexDirection: 'column', maxWidth: 345 }}
+                            >
+                                <CardMedia
+                                    component="video"
+                                    sx={{
+                                        // 16:9
+                                        // pt: '56.25%',
+                                    }}
+                                    src={video.url}
+                                    controls={true}
+                                />
+                                <CardContent sx={{ flexGrow: 1 }}>
+                                    <Typography gutterBottom variant="h6" component="h2">
+                                        {video.user}:
+                                        <br/>
+                                        {video.message}
+                                    </Typography>
+                                </CardContent>
+                                <CardActions>
+                                    <Button onClick={()=>handleVideoDelete(video)}> Delete </Button>
+                                </CardActions>
+                            </Card>
                         </Grid>
                     ))}
             </Grid>

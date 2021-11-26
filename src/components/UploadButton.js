@@ -195,13 +195,18 @@ function UploadButton(props) {
                     </label>
                 </DialogContent>
                 <DialogActions>
-                    <Button onClick={handleClose}
-                            variant="outlined"
-                            disabled={loading}
+                    { loading
+                        ?
+                        "Uploading..."
+                        :
+                        <Button onClick={handleClose}
+                                variant="outlined"
+                                disabled={loading}
 
-                    >
-                        { loading ? "Uploading..." : "Cancel"}
-                    </Button>
+                        >
+                            Cancel
+                        </Button>
+                    }
                     <Button variant="outlined"
                             disabled={!currentFile || loading}
                             onClick={handleUpload}>

@@ -64,14 +64,14 @@ function PhotoGallery(props) {
                     // case1: success
                     if(res.status === 200) {
                         // step1: set state
-                        props.handleAllert('success','Delete posts successes!');
+                        props.handleAlert('success','Delete posts successes!');
                         setImages(newImageArr);
                         props.handleDeleted();
                     }
                 })
                 .catch( err => {
                     // case2: fail
-                    props.handleAllert('error','Delete posts failed!');
+                    props.handleAlert('error','Delete posts failed!');
                     console.log('fetch posts failed: ', err.message);
                 })
         }

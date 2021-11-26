@@ -38,14 +38,13 @@ function SearchBar(props) {
 
     const changeSearchType = (e) => {
         // e is the event object
-        const searchType = e.target.value;
-        console.log(searchType);
+        console.log(e.target.value);
         // call setStates fn to reset the searchType value
-        setType(searchType);
+        setType(e.target.value);
         // 切换时应该清除error message
         setError("");
         // if search type is all, then disable the keyword, -> set the keyword=""
-        if (searchType == SEARCH_KEY.all) {
+        if (e.target.value == SEARCH_KEY.all) {
             props.handleSearch({ type: SEARCH_KEY.all, keywords: "" });
         }
     };

@@ -63,7 +63,13 @@ function App() {
         {/*  <TopBar />*/}
         <Main
             isLoggedIn={isLoggedIn} handleLoggedIn={onLoggedIn} handleAlert = {onAlert}/>
-        <Box sx = {{ bgcolor: 'background.paper', p: 6, pb: 2, pt: 2, }}
+        <Box sx = {{
+            bgcolor: 'background.paper',
+            position:'fixed',
+            bottom:0,
+            left: 0,
+            right: 0,
+        }}
              component="footer">
             <CopyRight sx={{ mt: 4, mb: 2 }}/>
         </Box>
